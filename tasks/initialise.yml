@@ -1,0 +1,66 @@
+---
+- name: Expand the filesystem to fill storage
+  ansible.builtin.command: raspi-config nonint do_expand_rootfs
+
+- name: Set GPU memory split to 16MB
+  ansible.builtin.command: raspi-config nonint do_memory_split 16
+
+- name: Set wireless country to NZ
+  ansible.builtin.command: raspi-config nonint do_wifi_country NZ
+
+- name: Disable all wireless
+  ansible.builtin.command: rfkill block all
+
+- name: Remove bluetooth packages
+  ansible.builtin.apt:
+    pkg:
+      - bluez
+      - bluez-firmware
+      - pi-bluetooth
+    state: absent
+    purge: yes
+
+- name: Mount temporary directories as tmpfs
+  ansible.posix.mount:
+    fstype: tmpfs
+    opts: defaults,nodev,nosuid,relatime,size=50M,mode=1777
+    path: "{{ item }}"
+    src: tmpfs
+    state: mounted
+  loop:
+    - /tmp
+    - /var/tmp
+
+# it appears that only the most recent raspberry pi kernel packages
+# are installable, and we need matching kernel + headers to use the
+# dkms packages. Bring everything up to date now before we start.
+- name: Install new kernel and headers  # noqa package-latest
+  ansible.builtin.apt:
+    pkg:
+      - raspberrypi-kernel
+      - raspberrypi-kernel-headers
+    state: latest
+    update_cache: yes
+
+- name: Restart into new kernel
+  ansible.builtin.reboot:
+
+# network configuration is by default done using the dhcp server (even
+# static addressing) - disable the service so we can manage it the same
+# way as other machines, but leave it running for now otherwise we lose
+# the current dhcp supplied address.
+- name: Disable DHCP service
+  ansible.builtin.service:
+    enabled: no
+    name: dhcpcd.service
+
+# this repository will be listed in the sources.list file instead
+- name: Delete pi-specific apt repository file
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/raspi.list
+    state: absent
+
+- name: Run common provision tasks
+  ansible.builtin.import_role:
+    name: provision
+    tasks_from: common
