@@ -1,7 +1,8 @@
 ---
-- name: Apply base provision role
+- name: Get provision user credentials
   ansible.builtin.import_role:
     name: provision
+    tasks_from: credentials
 
 - name: Initial raspberry pi configuration
   vars:
@@ -68,3 +69,8 @@
       ansible.builtin.file:
         path: /etc/apt/sources.list.d/raspi.list
         state: absent
+
+- name: Run common provision tasks as provision user
+  ansible.builtin.import_role:
+    name: provision
+    tasks_from: common
