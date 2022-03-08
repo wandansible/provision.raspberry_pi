@@ -8,5 +8,6 @@
   vars:
     ansible_user: "{{ provision_user_username }}"
     ansible_ssh_pass: "{{ provision_user_ssh_password }}"
+    ansible_ssh_private_key_file: "{{ provision_user_private_key_file }}"
     ansible_become_pass: "{{ provision_user_password }}"
   ansible.builtin.import_tasks: initialise.yml
