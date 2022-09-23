@@ -1,0 +1,11 @@
+---
+argument_specs:
+  main:
+    short_description: Provision Raspberry Pi
+    description: |
+      Provision a Raspberry Pi that already has Raspberry Pi OS installed,
+      contains a provision user with sudo permissions,
+      and has sshd installed and running.
+      If using SSH public key authentication then the provision user's
+      public key must be included in their authorized keys file.
+    options: {}
