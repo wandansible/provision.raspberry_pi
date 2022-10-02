@@ -1,0 +1,12 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include wandansible.provision.raspberry_pi"
+      ansible.builtin.include_role:
+        name: "wandansible.provision.raspberry_pi"
+      vars:
+        raspi_memory_split_megabytes: null
+        raspi_kernel_restart: false
+        provision_user_password: password
+  become: true

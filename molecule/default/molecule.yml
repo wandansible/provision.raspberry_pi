@@ -1,0 +1,42 @@
+---
+role_name_check: 1
+dependency:
+  name: galaxy
+  options:
+    role-file: meta/requirements.yml
+driver:
+  name: docker
+platforms:
+  - name: raspberrypi4
+    image: balenalib/raspberrypi4-64
+    pre_build_image: false
+    override_command: false
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  - name: raspberrypi3
+    image: balenalib/raspberrypi3
+    pre_build_image: false
+    override_command: false
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+provisioner:
+  name: ansible
+  log: true
+verifier:
+  name: ansible
+scenario:
+  test_sequence:
+    - dependency
+    - lint
+    - cleanup
+    - destroy
+    - syntax
+    - create
+    - prepare
+    - converge
+    - side_effect
+    - verify
+    - cleanup
+    - destroy
