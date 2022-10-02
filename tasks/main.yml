@@ -1,7 +1,7 @@
 ---
 - name: Get provision user credentials
   ansible.builtin.import_role:
-    name: provision
+    name: wandansible.provision
     tasks_from: credentials
 
 - name: Run initial raspberry pi configuration as provision user
