@@ -64,5 +64,5 @@
 
 - name: Run common provision tasks
   ansible.builtin.import_role:
-    name: provision
+    name: wandansible.provision
     tasks_from: common

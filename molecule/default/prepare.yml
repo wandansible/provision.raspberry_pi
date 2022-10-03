@@ -1,0 +1,10 @@
+---
+- name: Prepare
+  hosts: all
+  tasks:
+    - name: "Install dependencies"
+      ansible.builtin.apt:
+        pkg:
+          - "dhcpcd5"
+          - "raspi-config"
+          - "rfkill"
