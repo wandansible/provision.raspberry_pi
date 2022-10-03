@@ -1,0 +1,3 @@
+---
+raspi_memory_split_megabytes: 16
+raspi_kernel_restart: true
