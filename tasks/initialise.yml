@@ -2,8 +2,9 @@
 - name: Expand the filesystem to fill storage
   ansible.builtin.command: raspi-config nonint do_expand_rootfs
 
-- name: Set GPU memory split to 16MB
-  ansible.builtin.command: raspi-config nonint do_memory_split 16
+- name: Set GPU memory split to {{ raspi_memory_split_megabytes }}
+  ansible.builtin.command: "raspi-config nonint do_memory_split {{ raspi_memory_split_megabytes }}"
+  when: raspi_memory_split_megabytes
 
 - name: Set wireless country to NZ
   ansible.builtin.command: raspi-config nonint do_wifi_country NZ
@@ -44,6 +45,7 @@
 
 - name: Restart into new kernel
   ansible.builtin.reboot:
+  when: raspi_kernel_restart
 
 # network configuration is by default done using the dhcp server (even
 # static addressing) - disable the service so we can manage it the same

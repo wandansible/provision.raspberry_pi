@@ -8,4 +8,12 @@ argument_specs:
       and has sshd installed and running.
       If using SSH public key authentication then the provision user's
       public key must be included in their authorized keys file.
-    options: {}
+    options:
+      raspi_memory_split_megabytes:
+        description: Amount of shared memory (in megabytes) to dedicate to the GPU
+        type: int
+        default: 16
+      raspi_kernel_restart:
+        description: If true, restart into new kernel during provision
+        type: bool
+        default: true
