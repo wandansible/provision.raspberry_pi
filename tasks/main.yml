@@ -4,10 +4,18 @@
     name: wandansible.provision
     tasks_from: credentials
 
-- name: Run initial raspberry pi configuration as provision user
+- name: Run initial raspberry pi configuration as provision user using public key SSH authentication
   vars:
     ansible_user: "{{ provision_user_username }}"
-    ansible_ssh_pass: "{{ provision_user_ssh_password }}"
     ansible_ssh_private_key_file: "{{ provision_user_private_key_file }}"
     ansible_become_pass: "{{ provision_user_password }}"
   ansible.builtin.import_tasks: initialise.yml
+  when: provision_user_ssh_password == ""
+
+- name: Run initial raspberry pi configuration as provision user using password-based SSH authentication
+  vars:
+    ansible_user: "{{ provision_user_username }}"
+    ansible_ssh_pass: "{{ provision_user_ssh_password }}"
+    ansible_become_pass: "{{ provision_user_password }}"
+  ansible.builtin.import_tasks: initialise.yml
+  when: provision_user_ssh_password != ""
