@@ -20,6 +20,6 @@ jobs:
       - name: Install test dependencies
         run: pip3 install -r test-requirements.txt
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
       - name: Run molecule
         run: molecule test
